@@ -35,27 +35,6 @@ def prepare_data():
 
     return A_theta, Y
 
-# Activation function (sigmoid)
-def sigmoid(arr):
-    return 1 / (1 + np.exp(-arr))
-
-# Feed forward process
-def feed_forward(A_theta):
-    # Layer 1 calculation
-    Z1 = W1 @ A_theta + b1
-    A1 = sigmoid(Z1)
-
-    # Layer 2 calculation
-    Z2 = W2 @ A1 + b2
-    A2 = sigmoid(Z2)
-
-    # Layer 3 calculation
-    Z3 = W3 @ A2 + b3
-    A3 = sigmoid(Z3)
-
-    y_hat = A3 # Predicted output
-    return y_hat
-
 def cost(y_hat, y):
     """y_hat and y should be a n^L x m matrix"""
     # Losses is n^L x m matrix
@@ -67,5 +46,30 @@ def cost(y_hat, y):
 
     return np.sum(summed_losses)
 
+# Activation function
+def g(z):
+    return 1 / (1 + np.exp(-z))
+
+# Feed forward process
+def feed_forward(A_theta):
+    # Layer 1 calculation
+    Z1 = W1 @ A_theta + b1
+    A1 = g(Z1)
+
+    # Layer 2 calculation
+    Z2 = W2 @ A1 + b2
+    A2 = g(Z2)
+
+    # Layer 3 calculation
+    Z3 = W3 @ A2 + b3
+    A3 = g(Z3)
+
+    cache = {
+        "A_theta": A_theta,
+        "A1": A1,
+        "A2": A2
+    }
+
+    return A3, cache
 A_theta, Y = prepare_data()
 y_hat = feed_forward(A_theta)
