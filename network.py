@@ -56,5 +56,16 @@ def feed_forward(A_theta):
     y_hat = A3 # Predicted output
     return y_hat
 
+def cost(y_hat, y):
+    """y_hat and y should be a n^L x m matrix"""
+    # Losses is n^L x m matrix
+    losses = -((y * np.log(y_hat)) + (1 - y) * np.log(1 - y_hat))
+    m = y_hat.reshape(-1).shape[0]
+
+    # Summing across axis = 1 makes this a n^L x 1 matrix
+    summed_losses = (1/m) * np.sum(losses, axis = 1)
+
+    return np.sum(summed_losses)
+
 A_theta, Y = prepare_data()
 y_hat = feed_forward(A_theta)
