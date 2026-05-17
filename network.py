@@ -33,7 +33,7 @@ def prepare_data():
     A_theta = X.T
     Y = y.reshape(n[L], m)
 
-    return A_theta, Y
+    return A_theta, Y, m
 
 def cost(y_hat, y):
     """y_hat and y should be a n^L x m matrix"""
@@ -71,5 +71,32 @@ def feed_forward(A_theta):
     }
 
     return A3, cache
-A_theta, Y = prepare_data()
+
+# Backpropagation process
+def backprop_layer_3(y_hat, Y, m, A2, W3):
+    A3 = y_hat
+
+    # Calculate dC/dZ3
+    dC_dZ3 = (1/m) * (A3 - Y)
+    assert dC_dZ3.shape == (n[3], m)
+
+    # Calculate dC/dW3
+    dZ3_dW3 = A2
+    assert dZ3_dW3.shape == (n[2], m)
+
+    dC_dW3 = dC_dZ3 @ dZ3_dW3.T
+    assert dC_dW3.shape == (n[3], n[2])
+
+    # Calculate dC/db3
+    dC_db3 = np.sum(dC_dZ3, axis = 1, keepdims = True)
+    assert dC_db3.shape == (n[3], 1)
+
+    # Calculate propagator dC/dA2
+    dZ3_dA2 = W3
+    dC_dA2 = W3.T @ dC_dZ3
+    assert dC_dA2.shape == (n[2], m)
+
+    return dC_dW3, dC_db3, dC_dA2
+
+A_theta, Y, m = prepare_data()
 y_hat = feed_forward(A_theta)
