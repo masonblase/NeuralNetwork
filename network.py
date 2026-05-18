@@ -73,7 +73,7 @@ def feed_forward(A_theta):
     return A3, cache
 
 # Backpropagation process
-def backprop_layer_3(y_hat, Y, m, A2, W3):
+def backprop_layer_3(y_hat, Y, m, A2, W3): # Layer L
     A3 = y_hat
 
     # Calculate dC/dZ3
@@ -97,6 +97,49 @@ def backprop_layer_3(y_hat, Y, m, A2, W3):
     assert dC_dA2.shape == (n[2], m)
 
     return dC_dW3, dC_db3, dC_dA2
+
+def backprop_layer_2(propagator_dC_dA2, A1, A2, W2):
+    # Calculate dC/dZ2
+    dA2_dZ2 = A2 * (1 - A2)
+    dC_dZ2 = propagator_dC_dA2 * dA2_dZ2
+    assert dC_dZ2.shape == (n[2], m)
+
+    # Calculate dC/dW2
+    dZ2_dW2 = A1
+    assert dZ2_dW2.shape == (n[1], m)
+
+    dC_dW2 = dC_dZ2 @ dZ2_dW2.T
+    assert dC_dW2.shape == (n[2], n[1])
+
+    # Calculate dC/db2
+    dC_db2 = np.sum(dC_dZ2, axis = 1, keepdims = True)
+    assert dC_db2.shape == (n[2], 1)
+
+    # Calculate propagator dC/dA1
+    dZ2_dA1 = W2
+    dC_dA1 = W2.T @ dC_dZ2
+    assert dC_dA1.shape == (n[1], m)
+
+    return dC_dW2, dC_db2, dC_dA1
+
+def backprop_layer_1(propagator_dC_dA1, A1, A_theta, W1):
+    # Calculate dC/dZ1
+    dA1_dZ1 = A1 * (1 - A1)
+    dC_dZ1 = propagator_dC_dA1 * dA1_dZ1
+    assert dC_dZ1.shape == (n[1], m)
+
+    # Calculate dC/dW1
+    dZ1_dW1 = A_theta
+    assert dZ1_dW1.shape == (n[0], m)
+
+    dC_dW1 = dC_dZ1 @ dZ1_dW1.T
+    assert dC_dW1.shape == (n[1], n[0])
+
+    # Calculate dC/db1
+    dC_db1 = np.sum(dC_dZ1, axis = 1, keepdims = True)
+    assert dC_db1.shape == (n[1], 1)
+
+    return dC_dW1, dC_db1
 
 A_theta, Y, m = prepare_data()
 y_hat = feed_forward(A_theta)
