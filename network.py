@@ -191,7 +191,7 @@ def train():
         if e % 20 == 0:
             print(f"Epoch {e}: cost = {error:4f}")
         
-        return costs
+    return costs
 
 A_theta, Y, m = prepare_data()
 y_hat = feed_forward(A_theta)
