@@ -141,5 +141,58 @@ def backprop_layer_1(propagator_dC_dA1, A1, A_theta, W1):
 
     return dC_dW1, dC_db1
 
+def train():
+    global W3, W2, W1, b3, b2, b1
+
+    epochs = 1000 # Number of times to loop through the training data
+    alpha = 0.1 # Learning rate
+    costs = [] # List to store cost at each epoch
+
+    for e in range(epochs):
+        # Forward pass
+        y_hat, cache = feed_forward(A_theta)
+
+        # Calculate cost
+        error = cost(y_hat, Y)
+        costs.append(error)
+
+        # Backward pass
+        dC_dW3, dC_db3, dC_dA2 = backprop_layer_3(
+            y_hat,
+            Y,
+            m,
+            A2 = cache["A2"],
+            W3 = W3
+        )
+
+        dC_dW2, dC_db2, dC_dA1 = backprop_layer_2(
+            propagator_dC_dA2 = dC_dA2,
+            A1 = cache["A1"],
+            A2 = cache["A2"],
+            W2 = W2
+        )
+
+        dC_dW1, dC_db1 = backprop_layer_1(
+            propagator_dC_dA1 = dC_dA1,
+            A1 = cache["A1"],
+            A_theta = cache["A_theta"],
+            W1 = W1
+        )
+
+        # Update weights and biases
+        W3 = W3 - (alpha * dC_dW3)
+        W2 = W2 - (alpha * dC_dW2)
+        W1 = W1 - (alpha * dC_dW1)
+        
+        b3 = b3 - (alpha * dC_db3)
+        b2 = b2 - (alpha * dC_db2)
+        b1 = b1 - (alpha * dC_db1)
+
+        if e % 20 == 0:
+            print(f"Epoch {e}: cost = {error:4f}")
+        
+        return costs
+
 A_theta, Y, m = prepare_data()
 y_hat = feed_forward(A_theta)
+costs = train()
