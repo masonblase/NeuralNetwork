@@ -27,6 +27,10 @@ def prepare_data():
         [184, 64],
         [130, 69]
     ])
+    
+    # Normalize the data
+    X = (X - X.mean(axis = 0)) / X.std(axis = 0)
+    
     # Sample labels (0 for healthy, 1 for unhealthy)
     y = np.array([[0], [1], [1], [0], [0], [1], [1], [0], [1], [0]])
     m = 10
