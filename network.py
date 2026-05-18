@@ -30,7 +30,7 @@ def prepare_data():
     
     # Normalize the data
     X = (X - X.mean(axis = 0)) / X.std(axis = 0)
-    
+
     # Sample labels (0 for healthy, 1 for unhealthy)
     y = np.array([[0], [1], [1], [0], [0], [1], [1], [0], [1], [0]])
     m = 10
@@ -148,8 +148,8 @@ def backprop_layer_1(propagator_dC_dA1, A1, A_theta, W1):
 def train():
     global W3, W2, W1, b3, b2, b1
 
-    epochs = 1000 # Number of times to loop through the training data
-    alpha = 0.1 # Learning rate
+    epochs = 10000 # Number of times to loop through the training data
+    alpha = 0.01 # Learning rate
     costs = [] # List to store cost at each epoch
 
     for e in range(epochs):
