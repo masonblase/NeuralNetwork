@@ -5,9 +5,9 @@ L = 3
 n = [2, 3, 3, 1]
 
 # Random weights and biases
-W1 = np.random.randn(n[1], n[0])
-W2 = np.random.randn(n[2], n[1])
-W3 = np.random.randn(n[3], n[2])
+W1 = np.random.randn(n[1], n[0]) * np.sqrt(1 / n[0])
+W2 = np.random.randn(n[2], n[1]) * np.sqrt(1 / n[1])
+W3 = np.random.randn(n[3], n[2]) * np.sqrt(1 / n[2])
 b1 = np.random.randn(n[1], 1)
 b2 = np.random.randn(n[2], 1)
 b3 = np.random.randn(n[3], 1)
