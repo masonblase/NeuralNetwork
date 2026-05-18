@@ -4,7 +4,7 @@ import numpy as np
 L = 3
 n = [2, 3, 3, 1]
 
-# Random weights and biases
+# Weights and biases initialization
 W1 = np.random.randn(n[1], n[0]) * np.sqrt(1 / n[0])
 W2 = np.random.randn(n[2], n[1]) * np.sqrt(1 / n[1])
 W3 = np.random.randn(n[3], n[2]) * np.sqrt(1 / n[2])
@@ -41,14 +41,8 @@ def prepare_data():
 
 def cost(y_hat, y):
     """y_hat and y should be a n^L x m matrix"""
-    # Losses is n^L x m matrix
-    losses = -((y * np.log(y_hat)) + (1 - y) * np.log(1 - y_hat))
-    m = y_hat.reshape(-1).shape[0]
-
-    # Summing across axis = 1 makes this a n^L x 1 matrix
-    summed_losses = (1/m) * np.sum(losses, axis = 1)
-
-    return np.sum(summed_losses)
+    m = y_hat.shape[1]
+    return (-1/m) * np.sum(y * np.log(y_hat) + (1 - y) * np.log(1 - y_hat))
 
 # Activation function
 def g(z):
